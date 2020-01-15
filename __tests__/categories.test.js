@@ -68,6 +68,7 @@ describe('Categories Model', () => {
             // Category[0] value:  { name: 'Test Category', id: 'ba40b7df-21eb-439f-9d7f-adef51ddde09' }
             // expect(validator.isCategories(category)).toEqual(true);
             Object.keys(obj).forEach(key => {
+              Categories.s
               // console.log('Category[0][key] value: ', category[0][key]);
               // console.log('Category[0].type value: ', category[0].type);
               // expect(validator.isCorrectType(category[0][key], category[0].type));
