@@ -41,33 +41,39 @@ describe('Categories Model', () => {
         return categories.get(record._id)
           .then(category => {
             Object.keys(obj).forEach(key => {
-              console.log('Category[0][key] value: ', category[0][key]);
-              console.log('categories.schema[key].type value: ', categories.schema[key].type);
               expect(validator.isCorrectType(category[0][key], categories.schema[key].type)).toEqual(true);
             });
           });
         });
     });
 
-    it(' can delete a category', () => {
+    it(' can update a category', () => {
+      let obj = { name: 'Test Category 1' };
+      return categories.create(obj)
+      .then(record => {
+        return categories.get(record._id)
+          .then(category => {
+            obj.name = 'Test Category Changed';
+            return categories.update(category[0].id, obj)
+              .then(record => {
+                expect(record.name).toEqual(obj.name);
+              });
+          });
+        });
+    });
+
+    it('can delete a category', () => {
       let obj = { name: 'Test Category 1' };
       let obj2 = { name: 'Test Category 2' };
       return categories.create(obj)
         .then(() => {
           return categories.create(obj2)
         }).then(record => {
-          // idToDelete = record._id;
-          // console.log('record to delete: ', record);
           return categories.get(record._id)
             .then(category => {
-              console.log('ID of category to delete: ', category[0].id);
               categories.delete(category[0].id);
-              // categories.delete(record._id);
-                // console.log('category[0][key] value: ', category[0][key]);
-                // expect(category[0][key]).toEqual(obj[key]);
               categories.database.forEach(catLeft => {
                 expect(catLeft.id).not.toEqual(category[0].id);
-                console.log(catLeft);
               });
           });
         });
