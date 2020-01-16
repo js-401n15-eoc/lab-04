@@ -48,4 +48,28 @@ describe('Categories Model', () => {
           });
         });
     });
+
+    it(' can delete a category', () => {
+      let obj = { name: 'Test Category 1' };
+      let obj2 = { name: 'Test Category 2' };
+      return categories.create(obj)
+        .then(() => {
+          return categories.create(obj2)
+        }).then(record => {
+          // idToDelete = record._id;
+          // console.log('record to delete: ', record);
+          return categories.get(record._id)
+            .then(category => {
+              console.log('ID of category to delete: ', category[0].id);
+              categories.delete(category[0].id);
+              // categories.delete(record._id);
+                // console.log('category[0][key] value: ', category[0][key]);
+                // expect(category[0][key]).toEqual(obj[key]);
+              categories.database.forEach(catLeft => {
+                expect(catLeft.id).not.toEqual(category[0].id);
+                console.log(catLeft);
+              });
+          });
+        });
+    });
 });
