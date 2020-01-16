@@ -1,6 +1,6 @@
 'use strict';
 
-const DataModel = require('./memory-data-model.js');
+const DataModel = require('./file-data-model.js');
 
 class Products extends DataModel {
   constructor() {
