@@ -4,6 +4,7 @@ const Validator = require('../lib/validator.js');
 describe('Categories Model', () => {
 
   let categories;
+  let validator;
 
   beforeEach(() => {
     categories = new Categories();
@@ -47,7 +48,7 @@ describe('Categories Model', () => {
         });
     });
 
-    it(' can update a category', () => {
+    it('can update a category', () => {
       let obj = { name: 'Test Category 1' };
       return categories.create(obj)
       .then(record => {
