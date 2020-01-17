@@ -1,7 +1,12 @@
 'use strict';
 
 const uuid = require('uuid/v4');
-const fs = require('../__mocks__/fs.js');
+const mockFs = require('../__mocks__/fs.js');
+const fs = require('fs');
+const Validator = require('../lib/validator.js');
+const filePath = `${__dirname}/data/products.json`;
+const validator = new Validator();
+const Products = require('../models/products.js');
 
 class Model {
 
@@ -9,15 +14,32 @@ class Model {
     this.database = [];
   }
 
-  get(id) {
-    let response = id ? this.database.filter((record) => record.id === id) : this.database;
-    return Promise.resolve(response);
+  async get(id) {
+    return new Promise((resolve, reject) => {
+        fs.readFile(filePath, (err, data) => {
+        if (err) {
+            reject(err);
+        }
+        this.database = JSON.parse(data);
+        let response = id ? this.database.filter((record) => record.id === id) : this.database;
+        resolve(response);
+        });
+    });
   }
 
-  create(record) {
+  create(record, objType) {
     record.id = uuid();
-    this.database.push(record);
-    return Promise.resolve(record);
+    return new Promise((resolve, reject) => {
+      if (!validator.isValid(record, objType)) { reject('Invalid Object'); }
+      const jsonString = JSON.stringify(record);
+      fs.writeFile(filePath, jsonString, (err, data) => {
+        if (err) { reject(err); }
+        else {
+            data = record;
+            resolve(data);
+        }
+      });
+    })
   }
 
   update(id, record) {
