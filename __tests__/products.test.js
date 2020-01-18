@@ -13,6 +13,7 @@ describe('Products Model', () => {
 
   it('can post() a new product', () => {
     let obj = { 
+      category_id: '123456',
       price: 555,
       weight: 10,
       quantity_in_stock: 5,
@@ -28,6 +29,7 @@ describe('Products Model', () => {
 
   it('can get() a product', () => {
     let obj = { 
+      category_id: '123456',
       price: 555,
       weight: 10,
       quantity_in_stock: 5,
@@ -37,49 +39,33 @@ describe('Products Model', () => {
         return products.get(record._id)
           .then(product => {
             Object.keys(obj).forEach(key => {
-              console.log('Product obj: ', product);
+              console.log('Product obj: ', product[0]);
               console.log('Obj obj: ', obj);
-              expect(product[key]).toEqual(obj[key]);
+              expect(product[0][key]).toEqual(obj[key]);
             });
           });
       });
   });
 
-  // it('contains values that have the same types defined in the class schema', () => {
-  //   let obj = { 
-  //     price: 555,
-  //     weight: 10,
-  //     quantity_in_stock: 5,
-  //   };
-  //   return products.create(obj)
-  //     .then(record => {
-  //       return products.get(record._id)
-  //         .then(product => {
-  //           Object.keys(obj).forEach(key => {
-  //             expect(validator.isCorrectType(product[0][key], products.schema[key].type)).toEqual(true);
-  //           });
-  //         });
-  //       });
-  //   });
-
-  //   it('can update a product', () => {
-  //     let obj = { 
-  //       price: 555,
-  //       weight: 10,
-  //       quantity_in_stock: 5,
-  //     };
-  //     return products.create(obj)
-  //     .then(record => {
-  //       return products.get(record._id)
-  //         .then(product => {
-  //           obj.price = 2;
-  //           return products.update(product[0].id, obj)
-  //             .then(record => {
-  //               expect(record.price).toEqual(obj.price);
-  //             });
-  //         });
-  //       });
-  //   });
+  it('can update a product', () => {
+    let obj = {
+      category_id: '123456', 
+      price: 555,
+      weight: 10,
+      quantity_in_stock: 5,
+    };
+    return products.create(obj, products)
+    .then(record => {
+      return products.get(record._id)
+        .then(product => {
+          obj.price = 2;
+          return products.update(product[0].id, obj)
+            .then(record => {
+              expect(record.price).toEqual(obj.price);
+            });
+        });
+      });
+  });
 
   //   it('can delete a product', () => {
   //     let obj = { 

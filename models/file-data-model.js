@@ -10,48 +10,81 @@ const Products = require('../models/products.js');
 
 class Model {
 
-  constructor() {
-    this.database = [];
-  }
 
-  async get(id) {
+  get(id) {
     return new Promise((resolve, reject) => {
         fs.readFile(filePath, (err, data) => {
         if (err) {
             reject(err);
         }
-        this.database = JSON.parse(data);
-        let response = id ? this.database.filter((record) => record.id === id) : this.database;
+
+        const dbObj = JSON.parse(data);
+        let response = id ? dbObj.database.filter((record) => record.id === id) : dbObj.database;
         resolve(response);
         });
     });
   }
 
   create(record, objType) {
-    record.id = uuid();
     return new Promise((resolve, reject) => {
+      record.id = uuid();
       if (!validator.isValid(record, objType)) { reject('Invalid Object'); }
-      const jsonString = JSON.stringify(record);
-      fs.writeFile(filePath, jsonString, (err, data) => {
-        if (err) { reject(err); }
-        else {
-            data = record;
-            resolve(data);
+      
+      fs.readFile(filePath, (err, data) => {
+        if (err) {
+          reject(err);
         }
+        let dbObj;
+        
+        dbObj = data ? JSON.parse(data) : null;
+        let jsonString;
+        if (!dbObj.database) {
+          dbObj = {
+            database: []
+          };
+        }
+        dbObj.database.push(record);
+        jsonString = JSON.stringify(dbObj);
+        fs.writeFile(filePath, jsonString, (err, data) => {
+          if (err) { reject(err); }
+          else {
+              data = record;
+              resolve(data);
+          }
+        });
       });
-    })
+    });
   }
 
   update(id, record) {
-    this.database = this.database.map((item) => (item.id === id) ? record : item);
-    return Promise.resolve(record);
+    return new Promise((resolve, reject) => {
+      fs.readFile(filePath, (err, data) => {
+        if (err) {
+          reject(err);
+        }
+  
+        const dbObj = JSON.parse(data);
+        dbObj.database = dbObj.database.map((item) => (item.id === id) ? record : item);
+  
+        return resolve(record);
+      });
+    });
   }
 
   delete(id) {
-    this.database = this.database.filter((record) => record.id !== id);
-    return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      fs.readFile(filePath, (err, data) => {
+        if (err) {
+          reject(err);
+        }
+  
+        const dbObj = JSON.parse(data);
+        dbObj.database = this.database.filter((record) => record.id !== id);
+  
+        return resolve(record);
+      });
+    });
   }
-
 }
 
 module.exports = Model;

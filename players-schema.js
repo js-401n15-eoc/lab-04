@@ -6,7 +6,8 @@ console.log('testing 1-2-3');
 const products = new Products();
 const validator = new Validator();
 
-let obj = { 
+let obj = {
+    category_id: '123456', 
     price: 555,
     weight: 10,
     quantity_in_stock: 5,
@@ -14,7 +15,36 @@ let obj = {
 
 console.log('Product object to create: ', obj);
 products.create(obj, products).then(record => {
+    console.log('Did we get a record? ', record);
+    obj.id = record.id;
     Object.keys(obj).forEach(key => {
-        console.log('record[key] value: ', record[key]);
+        console.log('key: ', key, '        value: ', record[key]);
+    });
+
+    console.log('Lets try to edit!');
+    let editObj = {
+        category_id: '4444', 
+        price: 5,
+        weight: 1,
+        quantity_in_stock: 2,
+      };
+    products.update(record.id, editObj).then(editedRecord => console.log('Record after update: ', editedRecord[0]));
+}).catch(e => console.error('ERR', e));
+
+let obj2 = {
+    category_id: '654321', 
+    price: 444,
+    quantity_in_stock: 1,
+  };
+
+console.log('Product object to create: ', obj2);
+products.create(obj2, products).then(record => {
+    console.log('Did we get a record? ', record);
+    Object.keys(obj2).forEach(key => {
+        console.log('key: ', key, '        value: ', record[key]);
     });
 }).catch(e => console.error('ERR', e));
+
+products.get(obj.id).then(record => {
+    console.log('Record from second get: ', record[0]);
+});
