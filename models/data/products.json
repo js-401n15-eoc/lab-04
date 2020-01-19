@@ -1,1 +1,1 @@
-{}
+{"00afbc30-2479-4767-9bfe-b4b23e059b16":{"schema":{"fields":{"id":{"type":"string","required":true},"category_id":{"type":"string","required":true},"price":{"type":"number","required":true},"weight":{"type":"number"},"quantity_in_stock":{"type":"number","required":true}}},"id":"00afbc30-2479-4767-9bfe-b4b23e059b16","category_id":"4444","price":5,"weight":1,"quantity_in_stock":2}}

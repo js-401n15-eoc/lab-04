@@ -46,7 +46,7 @@ describe('Categories Model', () => {
         });
       })
       .catch(e => {
-        console.error('ERR', e);
+        // console.error('ERR', e);
         expect(e).toEqual('Invalid Object');
       });
   });

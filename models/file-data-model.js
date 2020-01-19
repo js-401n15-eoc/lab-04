@@ -115,12 +115,14 @@ class FileCollection {
         }
 
         let record = new this.DataModel(newData);
-        console.log(record);
+        record.id = id;
+        // console.log(record);
         if (!validator.isValid(record, record.schema)) { reject('Invalid Object'); }
 
-        // const dbObj = JSON.parse(data);
-        record[id] = record;
-        const jsonString = JSON.stringify(record);
+        const dbObj = JSON.parse(data);
+        dbObj[id] = record;
+        const jsonString = JSON.stringify(dbObj);
+        
         fs.writeFile(filePath, jsonString, (err, data) => {
           if (err) { reject(err); }
           else {
@@ -142,11 +144,12 @@ class FileCollection {
         }
 
         let record = new this.DataModel(newData);
-        console.log('the record: ', record);
-        // record[id] = id;
-        console.log(record);
         if (!validator.isValid(record, record.schema)) { reject('Invalid Object'); }
+        // console.log('the record: ', record);
+        const dbObj = JSON.parse(data);
+        dbObj[id] = record;
         const jsonString = JSON.stringify(record);
+
         mockFs.writeFile(filePath, jsonString, (err, data) => {
           if (err) { reject(err); }
           else {
@@ -154,7 +157,7 @@ class FileCollection {
               // console.log('new data info: ', newData);
               let response = JSON.parse(data);
               response.id = id;
-              console.log('response before resolve: ', response);
+              // console.log('response before resolve: ', response);
               resolve(response);
           }
         });
