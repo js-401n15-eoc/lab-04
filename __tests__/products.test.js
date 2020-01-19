@@ -60,6 +60,21 @@ describe('Products Model', () => {
       .catch(e => console.error('ERR', e));
   });
 
+  it('can delete a product', () => {
+    return products.mockDelete(obj.id)
+    .then(records => {
+    //  records.forEach(recItem => {
+    //     expect(recItem.id).not.toEqual(obj.id);
+    //   });
+
+      Object.keys(records).forEach(key => {
+        expect(key).not.toEqual(obj.id);
+      });
+    })
+    .catch(e => console.error('ERR', e));
+  });
+});
+
   //   it('can delete a product', () => {
   //     let obj = { 
   //       price: 555,
@@ -85,4 +100,4 @@ describe('Products Model', () => {
   //         });
   //       });
   //   });
-});
+// });

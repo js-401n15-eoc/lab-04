@@ -186,6 +186,8 @@ class FileCollection {
   
         const dbObj = JSON.parse(data);
         // dbObj.database = this.database.filter((record) => record.id !== id);
+        if (!dbObj[id]) { reject('Entry not found'); }
+
         delete dbObj[id]; 
         const jsonString = JSON.stringify(dbObj);
         fs.writeFile(filePath, jsonString, (err, data) => {
@@ -193,6 +195,31 @@ class FileCollection {
           else {
               // data = newData;
               // console.log('data before the resolve: ', data);
+              resolve(dbObj);
+          }
+        });
+      });
+    });
+  }
+
+  mockDelete(id) {
+    return new Promise((resolve, reject) => {
+      mockFs.readFile(filePath, (err, data) => {
+        if (err) {
+          reject(err);
+        }
+  
+        const dbObj = JSON.parse(data);
+        // dbObj.database = this.database.filter((record) => record.id !== id);
+        if (!dbObj[id]) { reject('Entry not found'); }
+
+        delete dbObj[id]; 
+        const jsonString = JSON.stringify(dbObj);
+        mockFs.writeFile(filePath, jsonString, (err, data) => {
+          if (err) { reject(err); }
+          else {
+              // data = newData;
+              console.log('data before the mockDelete resolve: ', dbObj);
               resolve(dbObj);
           }
         });
