@@ -6,10 +6,11 @@ const fs = require('fs');
 const Validator = require('../lib/validator.js');
 const filePath = `${__dirname}/data/products.json`;
 const validator = new Validator();
-const Products = require('../models/products.js');
 
-class Model {
-
+class Collection {
+  constructor(DataModel) {
+    this.DataModel = DataModel;
+  }
 
   get(id) {
     return new Promise((resolve, reject) => {
@@ -28,6 +29,7 @@ class Model {
   create(record, objType) {
     return new Promise((resolve, reject) => {
       record.id = uuid();
+      console.log(this.schema);
       if (!validator.isValid(record, objType)) { reject('Invalid Object'); }
       
       fs.readFile(filePath, (err, data) => {
@@ -87,4 +89,4 @@ class Model {
   }
 }
 
-module.exports = Model;
+module.exports = Collection;
