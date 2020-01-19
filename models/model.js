@@ -8,6 +8,7 @@ class Model {
 
   constructor(schema, data) {
     this.schema = schema;
+    console.log('value of data in model: ', data);
     data.id = uuid();
     if (validator.isValid(this.schema, data)) {
       console.log('Are we hitting this?');

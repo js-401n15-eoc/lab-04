@@ -6,31 +6,35 @@ const categories = new Categories();
 const products = new Products();
 const validator = new Validator();
 
-// categories.create()
-// let obj = {
-//     category_id: '123456', 
-//     price: 555,
-//     weight: 10,
-//     quantity_in_stock: 5,
-//   };
-
+let obj = {
+    category_id: '123456', 
+    price: 555,
+    weight: 10,
+    quantity_in_stock: 5,
+  };
+let badObj = {
+    name: 2345,
+}
+categories.create(badObj).then(resut => {
+    console.log('result in create: ', result);
+}).catch(err => console.log('ERR :' , err));
 // console.log('Product object to create: ', obj);
-products.create(obj, products).then(record => {
-    console.log('Did we get a record? ', record);
-    obj.id = record.id;
-    Object.keys(obj).forEach(key => {
-        console.log('key: ', key, '        value: ', record[key]);
-    });
+// products.create(obj).then(record => {
+//     console.log('Did we get a record? ', record);
+//     obj.id = record.id;
+//     Object.keys(obj).forEach(key => {
+//         console.log('key: ', key, '        value: ', record[key]);
+//     });
 
-    console.log('Lets try to edit!');
-    let editObj = {
-        category_id: '4444', 
-        price: 5,
-        weight: 1,
-        quantity_in_stock: 2,
-      };
-    products.update(record.id, editObj).then(editedRecord => console.log('Record after update: ', editedRecord[0]));
-}).catch(e => console.error('ERR', e));
+//     console.log('Lets try to edit!');
+//     let editObj = {
+//         category_id: '4444', 
+//         price: 5,
+//         weight: 1,
+//         quantity_in_stock: 2,
+//       };
+//     products.update(record.id, editObj).then(editedRecord => console.log('Record after update: ', editedRecord));
+// }).catch(e => console.error('ERR', e));
 
 // let obj2 = {
 //     category_id: '654321', 

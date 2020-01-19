@@ -7,7 +7,8 @@ const Validator = require('../lib/validator.js');
 const filePath = `${__dirname}/data/products.json`;
 const validator = new Validator();
 
-class Collection {
+class FileCollection {
+
   constructor(DataModel) {
     this.DataModel = DataModel;
   }
@@ -26,26 +27,25 @@ class Collection {
     });
   }
 
-  create(record, objType) {
+  create(data) {
     return new Promise((resolve, reject) => {
-      record.id = uuid();
-      console.log(this.schema);
-      if (!validator.isValid(record, objType)) { reject('Invalid Object'); }
+      let record = new this.DataModel(data);
+      console.log(record);
+      if (!validator.isValid(record, record.schema)) { reject('Invalid Object'); }
       
       fs.readFile(filePath, (err, data) => {
         if (err) {
           reject(err);
         }
+
         let dbObj;
-        
         dbObj = data ? JSON.parse(data) : null;
         let jsonString;
-        if (!dbObj.database) {
-          dbObj = {
-            database: []
-          };
+
+        if (!dbObj) {
+          dbObj = {};
         }
-        dbObj.database.push(record);
+        dbObj[record.id] = record;
         jsonString = JSON.stringify(dbObj);
         fs.writeFile(filePath, jsonString, (err, data) => {
           if (err) { reject(err); }
@@ -58,16 +58,19 @@ class Collection {
     });
   }
 
-  update(id, record) {
+  update(id, newData) {
     return new Promise((resolve, reject) => {
       fs.readFile(filePath, (err, data) => {
         if (err) {
           reject(err);
         }
-  
+
+        let record = new this.DataModel(newData);
+        console.log(record);
+        if (!validator.isValid(record, record.schema)) { reject('Invalid Object'); }
+
         const dbObj = JSON.parse(data);
-        dbObj.database = dbObj.database.map((item) => (item.id === id) ? record : item);
-  
+        dbObj[record.id] = record;
         return resolve(record);
       });
     });
@@ -89,4 +92,4 @@ class Collection {
   }
 }
 
-module.exports = Collection;
+module.exports = FileCollection;

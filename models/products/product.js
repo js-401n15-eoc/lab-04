@@ -1,6 +1,6 @@
 'use strict';
 
-const Model = require('../../models/model.js');
+const Model = require('../model.js');
 
 const schema = {
     fields: {

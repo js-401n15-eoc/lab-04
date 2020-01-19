@@ -7,9 +7,10 @@ const Validator = require('../lib/validator.js');
 const filePath = `${__dirname}/data/products.json`;
 const validator = new Validator();
 
-class Model {
+class MemCollection {
 
-  constructor() {
+  constructor(DataModel) {
+    this.DataModel = DataModel;
     this.database = [];
   }
 
@@ -18,8 +19,12 @@ class Model {
     return Promise.resolve(response);
   }
 
-  create(record) {
-    record.id = uuid();
+  create(data) {
+    data.id = uuid();
+    let record = new this.DataModel(data);
+    console.log(record);
+    if (!validator.isValid(record, record.schema)) { return Promise.reject('Invalid Object'); }
+
     this.database.push(record);
     return Promise.resolve(record);
   }
@@ -36,4 +41,4 @@ class Model {
 
 }
 
-module.exports = Model;
+module.exports = MemCollection;

@@ -1,9 +1,9 @@
 'use strict';
 
-const Collection = require('../file-data-model.js');
+const FileCollection = require('../file-data-model.js');
 const Product = require('./product.js');
 
-class Products extends Collection {
+class Products extends FileCollection {
   constructor() {
     super(Product);
   }
