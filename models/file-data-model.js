@@ -31,22 +31,20 @@ class FileCollection {
 
   mockGet(id) {
     return new Promise((resolve, reject) => {
-      if (err) {
+      try {
+        let dbObj = {"12345":{"id":"12345","category_id":"5555","price":444,"weight":0.5,"quantity_in_stock":10},
+        "54321":{"id":"54321","category_id":"777","price":555,"quantity_in_stock":4}};  
+        let response = id ? dbObj["12345"] : dbObj;
+        resolve(response);
+      } catch (err) {
         reject(err);
       }
-
-      let dbObj = {"12345":{"id":"12345","category_id":"5555","price":444,"weight":0.5,"quantity_in_stock":10},
-      "54321":{"id":"54321","category_id":"777","price":555,"quantity_in_stock":4}};
-
-      let response = id ? dbObj["12345"] : dbObj;
-
-      resolve(response);
     });
   }
   create(data) {
     return new Promise((resolve, reject) => {
       let record = new this.DataModel(data);
-      console.log(record);
+      // console.log(record);
       if (!validator.isValid(record, record.schema)) { reject('Invalid Object'); }
       
       fs.readFile(filePath, (err, data) => {
@@ -76,10 +74,6 @@ class FileCollection {
 
   mockCreate(data) {
     return new Promise((resolve, reject) => {
-      if (err) {
-        reject(err);
-      }
-
       let dbObj = {"54321":{"id":"54321","category_id":"777","price":555,"quantity_in_stock":4}};
       dbObj[data.id] = {"id":"12345","category_id":"5555","price":444,"weight":0.5,"quantity_in_stock":10};
       resolve(JSON.stringify(dbObj));

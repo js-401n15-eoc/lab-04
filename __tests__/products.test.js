@@ -32,12 +32,11 @@ describe('Products Model', () => {
 
     return products.mockCreate(obj, products)
       .then(record => {
-        return products.get(record._id)
+        return products.mockGet(record._id)
           .then(product => {
             Object.keys(obj).forEach(key => {
-              console.log('Product obj: ', product[0]);
-              console.log('Obj obj: ', obj);
-              expect(product[0][key]).toEqual(obj[key]);
+              console.log('anything from product? ', product);
+              expect(product[key]).toEqual(obj[key]);
             });
           });
       });
