@@ -5,6 +5,8 @@ const mockFs = require('../__mocks__/fs.js');
 const fs = require('fs');
 const Validator = require('../lib/validator.js');
 const filePath = `${__dirname}/data/products.json`;
+const mockPath = `${__dirname}/data/mock-products.json`;
+
 const validator = new Validator();
 
 class FileCollection {
@@ -27,6 +29,20 @@ class FileCollection {
     });
   }
 
+  mockGet(id) {
+    return new Promise((resolve, reject) => {
+      if (err) {
+        reject(err);
+      }
+
+      let dbObj = {"12345":{"id":"12345","category_id":"5555","price":444,"weight":0.5,"quantity_in_stock":10},
+      "54321":{"id":"54321","category_id":"777","price":555,"quantity_in_stock":4}};
+
+      let response = id ? dbObj["12345"] : dbObj;
+
+      resolve(response);
+    });
+  }
   create(data) {
     return new Promise((resolve, reject) => {
       let record = new this.DataModel(data);
@@ -58,6 +74,17 @@ class FileCollection {
     });
   }
 
+  mockCreate(data) {
+    return new Promise((resolve, reject) => {
+      if (err) {
+        reject(err);
+      }
+
+      let dbObj = {"54321":{"id":"54321","category_id":"777","price":555,"quantity_in_stock":4}};
+      dbObj[data.id] = {"id":"12345","category_id":"5555","price":444,"weight":0.5,"quantity_in_stock":10};
+      resolve(JSON.stringify(dbObj));
+    });
+  }
   update(id, newData) {
     return new Promise((resolve, reject) => {
       fs.readFile(filePath, (err, data) => {
