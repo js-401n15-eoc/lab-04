@@ -118,9 +118,18 @@ class FileCollection {
         console.log(record);
         if (!validator.isValid(record, record.schema)) { reject('Invalid Object'); }
 
-        const dbObj = JSON.parse(data);
-        dbObj[id] = record;
-        return resolve(dbObj);
+        // const dbObj = JSON.parse(data);
+        record[id] = record;
+        const jsonString = JSON.stringify(record);
+        fs.writeFile(filePath, jsonString, (err, data) => {
+          if (err) { reject(err); }
+          else {
+              data = newData;
+              // console.log('data before the resolve: ', data);
+              resolve(data);
+          }
+        });
+        // return resolve(dbObj);
       });
     });
   }
@@ -133,12 +142,26 @@ class FileCollection {
         }
 
         let record = new this.DataModel(newData);
+        console.log('the record: ', record);
+        // record[id] = id;
         console.log(record);
         if (!validator.isValid(record, record.schema)) { reject('Invalid Object'); }
-
-        const dbObj = JSON.parse(data);
-        dbObj[id] = record;
-        return resolve(dbObj);
+        const jsonString = JSON.stringify(record);
+        mockFs.writeFile(filePath, jsonString, (err, data) => {
+          if (err) { reject(err); }
+          else {
+              // console.log('original data info: ', JSON.parse(data));
+              // console.log('new data info: ', newData);
+              let response = JSON.parse(data);
+              response.id = id;
+              console.log('response before resolve: ', response);
+              resolve(response);
+          }
+        });
+        // const dbObj = JSON.parse(record);
+        // dbObj[id] = record;
+        // console.log('dbObj at the end: ', dbObj);
+        // return resolve(record);
       });
     });
   }
@@ -151,9 +174,17 @@ class FileCollection {
         }
   
         const dbObj = JSON.parse(data);
-        dbObj.database = this.database.filter((record) => record.id !== id);
-  
-        return resolve(record);
+        // dbObj.database = this.database.filter((record) => record.id !== id);
+        delete dbObj[id]; 
+        const jsonString = JSON.stringify(record);
+        fs.writeFile(filePath, jsonString, (err, data) => {
+          if (err) { reject(err); }
+          else {
+              // data = newData;
+              // console.log('data before the resolve: ', data);
+              resolve(data);
+          }
+        });
       });
     });
   }
