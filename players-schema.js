@@ -36,7 +36,12 @@ products.create(obj).then(record => {
         weight: 1,
         quantity_in_stock: 2,
       };
-    products.update(record.id, editObj).then(editedRecord => console.log('Record after update: ', editedRecord));
+    products.update(record.id, editObj).then(editedRecord => {
+        console.log('Record after update: ', editedRecord);
+        products.delete(editedRecord.id).then(recordsLeft => {
+            console.log('Do we have anything left?', recordsLeft);
+        });
+    });
 }).catch(e => console.error('ERR', e));
 
 // let obj2 = {

@@ -52,7 +52,7 @@ describe('Products Model', () => {
       .then(record => {
         // console.log('Did we get a record? ', record);
         // console.log(newObj.id);
-        newObj.id = obj.id;
+        // newObj.id = obj.id;
         Object.keys(newObj).forEach(key => {
           expect(record[key]).toEqual(newObj[key])
         });

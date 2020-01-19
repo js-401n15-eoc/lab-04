@@ -19,6 +19,6 @@ exports.writeFile = (file, buffer, cb) => {
   }
   else {
     fileContents = buffer;
-    cb(undefined, fileContents);
+    cb(undefined, buffer);
   }
 };
