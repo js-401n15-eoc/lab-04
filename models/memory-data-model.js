@@ -1,6 +1,11 @@
 'use strict';
 
 const uuid = require('uuid/v4');
+const mockFs = require('../__mocks__/fs.js');
+const fs = require('fs');
+const Validator = require('../lib/validator.js');
+const filePath = `${__dirname}/data/products.json`;
+const validator = new Validator();
 
 class Model {
 

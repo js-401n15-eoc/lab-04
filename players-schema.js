@@ -1,19 +1,20 @@
-const Products = require('./models/products.js');
+const Products = require('./models/products/products.js');
 const Validator = require('./lib/validator.js');
+const Categories = require('./models/categories/categories.js');
 
-console.log('testing 1-2-3');
-
+const categories = new Categories();
 const products = new Products();
 const validator = new Validator();
 
-let obj = {
-    category_id: '123456', 
-    price: 555,
-    weight: 10,
-    quantity_in_stock: 5,
-  };
+// categories.create()
+// let obj = {
+//     category_id: '123456', 
+//     price: 555,
+//     weight: 10,
+//     quantity_in_stock: 5,
+//   };
 
-console.log('Product object to create: ', obj);
+// console.log('Product object to create: ', obj);
 products.create(obj, products).then(record => {
     console.log('Did we get a record? ', record);
     obj.id = record.id;
@@ -31,20 +32,20 @@ products.create(obj, products).then(record => {
     products.update(record.id, editObj).then(editedRecord => console.log('Record after update: ', editedRecord[0]));
 }).catch(e => console.error('ERR', e));
 
-let obj2 = {
-    category_id: '654321', 
-    price: 444,
-    quantity_in_stock: 1,
-  };
+// let obj2 = {
+//     category_id: '654321', 
+//     price: 444,
+//     quantity_in_stock: 1,
+//   };
 
-console.log('Product object to create: ', obj2);
-products.create(obj2, products).then(record => {
-    console.log('Did we get a record? ', record);
-    Object.keys(obj2).forEach(key => {
-        console.log('key: ', key, '        value: ', record[key]);
-    });
-}).catch(e => console.error('ERR', e));
+// console.log('Product object to create: ', obj2);
+// products.create(obj2, products).then(record => {
+//     console.log('Did we get a record? ', record);
+//     Object.keys(obj2).forEach(key => {
+//         console.log('key: ', key, '        value: ', record[key]);
+//     });
+// }).catch(e => console.error('ERR', e));
 
-products.get(obj.id).then(record => {
-    console.log('Record from second get: ', record[0]);
-});
+// products.get(obj.id).then(record => {
+//     console.log('Record from second get: ', record[0]);
+// });
