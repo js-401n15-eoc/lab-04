@@ -117,9 +117,12 @@ class FileCollection {
         let record = new this.DataModel(newData);
         record.id = id;
         // console.log(record);
-        if (!validator.isValid(record, record.schema)) { reject('Invalid Object'); }
+        if (!validator.isValid(record, record.schema)) { reject('Invalid object'); }
 
         const dbObj = JSON.parse(data);
+
+        if (!dbObj[id]) { reject('Entry not found'); }
+
         dbObj[id] = record;
         const jsonString = JSON.stringify(dbObj);
         
@@ -146,12 +149,12 @@ class FileCollection {
         let record = new this.DataModel(newData);
         record.id = id;
         console.log('dis record: ', record);
-        if (!validator.isValid(record, record.schema)) { reject('Invalid Object'); }
+        if (!validator.isValid(record, record.schema)) { reject('Invalid object'); }
         // console.log('the record: ', record);
-        newData.id = id;
         const dbObj = JSON.parse(data);
-        console.log('dbObj right after the parse; ', dbObj);
-        dbObj[id] = newData;
+        // console.log('dbObj right after the parse; ', dbObj);
+        if (!dbObj[id]) { reject('Entry not found'); }
+        dbObj[id] = record;
         console.log('What is dbObj now? ', dbObj);
         const jsonString = JSON.stringify(dbObj);
 
@@ -160,10 +163,10 @@ class FileCollection {
           else {
               // console.log('original data info: ', JSON.parse(data));
               // console.log('new data info: ', newData);
-              let response = newData;
+              data = newData;
               // response.id = id;
-              console.log('response before resolve: ', response);
-              resolve(response);
+              console.log('response before resolve: ', data);
+              resolve(data);
           }
         });
         // const dbObj = JSON.parse(record);
@@ -190,7 +193,7 @@ class FileCollection {
           else {
               // data = newData;
               // console.log('data before the resolve: ', data);
-              resolve(data);
+              resolve(dbObj);
           }
         });
       });

@@ -38,7 +38,7 @@ products.create(obj).then(record => {
       };
     products.update(record.id, editObj).then(editedRecord => {
         console.log('Record after update: ', editedRecord);
-        products.delete(editedRecord.id).then(recordsLeft => {
+        products.delete(record.id).then(recordsLeft => {
             console.log('Do we have anything left?', recordsLeft);
         });
     });
