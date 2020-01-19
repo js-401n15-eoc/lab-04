@@ -1,10 +1,18 @@
-const Categories = require('./models/categories/categories.js');
 const Products = require('./models/products/products.js');
 const Validator = require('./lib/validator.js');
+const Categories = require('./models/categories/categories.js');
+
 const categories = new Categories();
 const products = new Products();
 const validator = new Validator();
 
+
+// let badObj = {
+    //     name: 2345,
+    // }
+// categories.create(badObj).then(resut => {
+//     console.log('result in create: ', result);
+// }).catch(err => console.log('ERR :' , err));
 
 let obj = {
     category_id: '123456', 
@@ -28,7 +36,12 @@ products.create(obj).then(record => {
         weight: 1,
         quantity_in_stock: 2,
       };
-    products.update(record.id, editObj).then(editedRecord => console.log('Record after update: ', editedRecord[0]));
+    products.update(record.id, editObj).then(editedRecord => {
+        console.log('Record after update: ', editedRecord);
+        products.delete(record.id).then(recordsLeft => {
+            console.log('Do we have anything left?', recordsLeft);
+        });
+    });
 }).catch(e => console.error('ERR', e));
 
 // let obj2 = {
@@ -48,8 +61,3 @@ products.create(obj).then(record => {
 // products.get(obj.id).then(record => {
 //     console.log('Record from second get: ', record[0]);
 // });
-
-// let catObj = {
-//     name: 'Test Category',
-// }
-// categories.create(catObj);

@@ -2,7 +2,7 @@
   "name": "starter-code",
   "version": "1.0.0",
   "description": "",
-  "main": "players-schema.js",
+  "main": "index.js",
   "scripts": {
     "test": "jest --verbose",
     "test-watch": "jest --watchAll --verbose"

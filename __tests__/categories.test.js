@@ -41,12 +41,10 @@ describe('Categories Model', () => {
     return categories.create(obj)
       .then(record => {
         Object.keys(obj).forEach(key => {
-          console.log('value in the supposed failure: ', record[key]);
           expect(record[key]).toEqual(obj[key]);
         });
       })
       .catch(e => {
-        // console.error('ERR', e);
         expect(e).toEqual('Invalid object');
       });
   });

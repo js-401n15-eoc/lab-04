@@ -37,14 +37,12 @@ class FileCollection {
         }
 
         const dbObj = JSON.parse(data);
-        // console.log('dbObj in mockGet: ', dbObj);
-        // console.log('do we have an id? ', id);
         let response = id ? dbObj[id] : dbObj;
-        // console.log('response in mockget: ', response);
         resolve(response);
       });
     });
   }
+
   create(data) {
     return new Promise((resolve, reject) => {
       let record = new this.DataModel(data);
@@ -91,15 +89,12 @@ class FileCollection {
           dbObj = {};
         }
 
-        // console.log('looking at dbObj: ', dbObj);
-
         dbObj[newData.id] = newData;
         jsonString = JSON.stringify(dbObj);
         mockFs.writeFile(filePath, jsonString, (err, data) => {
           if (err) { reject(err); }
           else {
               data = newData;
-              // console.log('data before the resolve: ', data);
               resolve(data);
           }
         });
@@ -116,7 +111,7 @@ class FileCollection {
 
         let record = new this.DataModel(newData);
         record.id = id;
-        // console.log(record);
+
         if (!validator.isValid(record, record.schema)) { reject('Invalid object'); }
 
         const dbObj = JSON.parse(data);
@@ -130,11 +125,9 @@ class FileCollection {
           if (err) { reject(err); }
           else {
               data = newData;
-              // console.log('data before the resolve: ', data);
               resolve(data);
           }
         });
-        // return resolve(dbObj);
       });
     });
   }
@@ -148,31 +141,23 @@ class FileCollection {
 
         let record = new this.DataModel(newData);
         record.id = id;
-        console.log('dis record: ', record);
+
         if (!validator.isValid(record, record.schema)) { reject('Invalid object'); }
-        // console.log('the record: ', record);
+
         const dbObj = JSON.parse(data);
-        // console.log('dbObj right after the parse; ', dbObj);
+
         if (!dbObj[id]) { reject('Entry not found'); }
+
         dbObj[id] = record;
-        console.log('What is dbObj now? ', dbObj);
         const jsonString = JSON.stringify(dbObj);
 
         mockFs.writeFile(filePath, jsonString, (err, data) => {
           if (err) { reject(err); }
           else {
-              // console.log('original data info: ', JSON.parse(data));
-              // console.log('new data info: ', newData);
               data = newData;
-              // response.id = id;
-              console.log('response before resolve: ', data);
               resolve(data);
           }
         });
-        // const dbObj = JSON.parse(record);
-        // dbObj[id] = record;
-        // console.log('dbObj at the end: ', dbObj);
-        // return resolve(record);
       });
     });
   }
@@ -185,7 +170,7 @@ class FileCollection {
         }
   
         const dbObj = JSON.parse(data);
-        // dbObj.database = this.database.filter((record) => record.id !== id);
+
         if (!dbObj[id]) { reject('Entry not found'); }
 
         delete dbObj[id]; 
@@ -193,8 +178,6 @@ class FileCollection {
         fs.writeFile(filePath, jsonString, (err, data) => {
           if (err) { reject(err); }
           else {
-              // data = newData;
-              // console.log('data before the resolve: ', data);
               resolve(dbObj);
           }
         });
@@ -210,7 +193,6 @@ class FileCollection {
         }
   
         const dbObj = JSON.parse(data);
-        // dbObj.database = this.database.filter((record) => record.id !== id);
         if (!dbObj[id]) { reject('Entry not found'); }
 
         delete dbObj[id]; 
@@ -219,7 +201,6 @@ class FileCollection {
           if (err) { reject(err); }
           else {
               // data = newData;
-              console.log('data before the mockDelete resolve: ', dbObj);
               resolve(dbObj);
           }
         });

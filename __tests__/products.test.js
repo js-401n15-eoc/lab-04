@@ -1,15 +1,12 @@
 const Products = require('../models/products/products.js');
-const Validator = require('../lib/validator.js');
 
 describe('Products Model', () => {
 
   let products;
-  let validator;
   let obj;
 
   beforeEach(() => {
     products = new Products();
-    validator = new Validator();
     obj = {
       id: '12345', 
       category_id: '5555',
@@ -22,7 +19,6 @@ describe('Products Model', () => {
   it('can post() a new product', () => {
     return products.mockCreate(obj)
       .then(record => {
-        // console.log('record from post? ', record);
         Object.keys(obj).forEach(key => {
           expect(record[key]).toEqual(obj[key]);
         });
@@ -33,7 +29,6 @@ describe('Products Model', () => {
   it('can get() a product', () => {
     return products.mockGet(obj.id)
       .then(product => {
-        // console.log('anything from product? ', product);
         Object.keys(obj).forEach(key => {
           expect(product[key]).toEqual(obj[key]);
         });
@@ -63,10 +58,6 @@ describe('Products Model', () => {
   it('can delete a product', () => {
     return products.mockDelete(obj.id)
     .then(records => {
-    //  records.forEach(recItem => {
-    //     expect(recItem.id).not.toEqual(obj.id);
-    //   });
-
       Object.keys(records).forEach(key => {
         expect(key).not.toEqual(obj.id);
       });
@@ -74,30 +65,3 @@ describe('Products Model', () => {
     .catch(e => console.error('ERR', e));
   });
 });
-
-  //   it('can delete a product', () => {
-  //     let obj = { 
-  //       price: 555,
-  //       weight: 10,
-  //       quantity_in_stock: 5,
-  //     };
-      
-  //     let obj2 = { 
-  //       price: 123,
-  //       quantity_in_stock: 44,
-  //     };
-
-  //     return products.create(obj)
-  //       .then(() => {
-  //         return products.create(obj2)
-  //       }).then(record => {
-  //         return products.get(record._id)
-  //           .then(product => {
-  //             products.delete(product[0].id);
-  //             products.database.forEach(prodLeft => {
-  //               expect(prodLeft.id).not.toEqual(product[0].id);
-  //             });
-  //         });
-  //       });
-  //   });
-// });
