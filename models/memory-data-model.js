@@ -22,7 +22,6 @@ class MemCollection {
   create(data) {
     data.id = uuid();
     let record = new this.DataModel(data);
-    console.log(record);
     if (!validator.isValid(record, record.schema)) { return Promise.reject('Invalid Object'); }
 
     this.database.push(record);
