@@ -1,10 +1,6 @@
 'use strict';
 
-const uuid = require('uuid/v4');
-const mockFs = require('../__mocks__/fs.js');
-const fs = require('fs');
 const Validator = require('../lib/validator.js');
-const filePath = `${__dirname}/data/products.json`;
 const validator = new Validator();
 
 class MemCollection {
@@ -19,16 +15,16 @@ class MemCollection {
     return Promise.resolve(response);
   }
 
-  create(data) {
-    data.id = uuid();
-    let record = new this.DataModel(data);
+  create(newData) {
+    let record = new this.DataModel(newData);
     if (!validator.isValid(record, record.schema)) { return Promise.reject('Invalid object'); }
-
     this.database.push(record);
     return Promise.resolve(record);
   }
 
-  update(id, record) {
+  update(id, newData) {
+    let record = new this.DataModel(newData);
+    if (!validator.isValid(record, record.schema)) { return Promise.reject('Invalid object'); }
     this.database = this.database.map((item) => (item.id === id) ? record : item);
     return Promise.resolve(record);
   }

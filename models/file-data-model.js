@@ -82,7 +82,7 @@ class FileCollection {
         }
         
         let record = new this.DataModel(newData);
-        // console.log('record in mockCreate: ', record);
+
         if (!validator.isValid(record, record.schema)) { reject('Invalid object'); }
 
         let dbObj;

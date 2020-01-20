@@ -72,6 +72,16 @@ describe('Products Model', () => {
       .catch(e => console.error('ERR', e));
   });
 
+  it('will not update a product with a bad object', () => {
+    return products.mockUpdate(obj.id, badObj)
+      .then(record => {
+        console.log('We are not supposed to hit this! ', record);
+      }, failure => {
+          expect(failure).toEqual('Invalid object');
+        })
+      .catch(e => console.error('ERR', e));
+  });
+
   it('can delete a product', () => {
     return products.mockDelete(obj.id)
     .then(records => {

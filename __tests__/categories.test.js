@@ -49,7 +49,6 @@ describe('Categories Model', () => {
   });
 
   it('can update a category', () => {
-    let obj = { name: 'Test Category 1' };
     return categories.create(obj)
     .then(record => {
       return categories.get(record._id)
@@ -58,6 +57,21 @@ describe('Categories Model', () => {
           return categories.update(category[0].id, obj)
             .then(record => {
               expect(record.name).toEqual(obj.name);
+            });
+        });
+      });
+  });
+
+  it('will not update a category with a bad object', () => {
+    return categories.create(obj)
+    .then(record => {
+      return categories.get(record._id)
+        .then(category => {
+          return categories.update(category[0].id, badObj)
+            .then(record => {
+              console.log('We are not supposed to hit this! ', record);
+            }, failure => {
+              expect(failure).toEqual('Invalid object');
             });
         });
       });
