@@ -39,13 +39,11 @@ describe('Products Model', () => {
   it('will not post() an invalid object', () => {
     return products.mockCreate(badObj)
       .then(record => {
-        Object.keys(badObj).forEach(key => {
-          expect(record[key]).toEqual(badObj[key]);
-        });
+        console.log('We are not supposed to hit this! ', record);
+      }, failure => {
+        expect(failure).toEqual('Invalid object');
       })
-      .catch(e => {
-        expect(e).toEqual('Invalid object');
-      });
+      .catch(e => console.error('ERR', e));
   });
 
   it('can get() a product', () => {

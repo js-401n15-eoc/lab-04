@@ -5,7 +5,7 @@
 ### Author: Earl Jay Caoile
 
 ### Links and Resources
-* [submission PR](https://github.com/js-401n15-eoc/lab-04/pull/1)
+* [submission PR](https://github.com/js-401n15-eoc/lab-04/pull/2)
 * [GitHub Actions](https://github.com/js-401n15-eoc/lab-04/actions)
 
 #### Documentation

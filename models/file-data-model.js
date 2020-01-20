@@ -41,16 +41,17 @@ class FileCollection {
     });
   }
 
-  create(data) {
+  create(newData) {
     return new Promise((resolve, reject) => {
-      let record = new this.DataModel(data);
-
-      if (!validator.isValid(record, record.schema)) { reject('Invalid Object'); }
       
       fs.readFile(filePath, (err, data) => {
         if (err) {
           reject(err);
         }
+        
+        let record = new this.DataModel(newData);
+  
+        if (!validator.isValid(record, record.schema)) { reject('Invalid object'); }
 
         let dbObj;
         dbObj = data ? JSON.parse(data) : null;
@@ -74,10 +75,15 @@ class FileCollection {
 
   mockCreate(newData) {
     return new Promise((resolve, reject) => {
+      
       mockFs.readFile(filePath, (err, data) => {
         if (err) {
           reject(err);
         }
+        
+        let record = new this.DataModel(newData);
+        // console.log('record in mockCreate: ', record);
+        if (!validator.isValid(record, record.schema)) { reject('Invalid object'); }
 
         let dbObj;
         dbObj = data ? JSON.parse(data) : null;
@@ -87,7 +93,7 @@ class FileCollection {
           dbObj = {};
         }
 
-        dbObj[newData.id] = newData;
+        dbObj[record.id] = record;
         jsonString = JSON.stringify(dbObj);
         mockFs.writeFile(filePath, jsonString, (err, data) => {
           if (err) { reject(err); }
