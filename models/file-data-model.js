@@ -1,11 +1,9 @@
 'use strict';
 
-const uuid = require('uuid/v4');
 const mockFs = require('../__mocks__/fs.js');
 const fs = require('fs');
 const Validator = require('../lib/validator.js');
 const filePath = `${__dirname}/data/products.json`;
-const mockPath = `${__dirname}/data/mock-products.json`;
 
 const validator = new Validator();
 
@@ -200,7 +198,6 @@ class FileCollection {
         mockFs.writeFile(filePath, jsonString, (err, data) => {
           if (err) { reject(err); }
           else {
-              // data = newData;
               resolve(dbObj);
           }
         });

@@ -4,6 +4,7 @@ describe('Products Model', () => {
 
   let products;
   let obj;
+  let badObj;
 
   beforeEach(() => {
     products = new Products();
@@ -12,6 +13,14 @@ describe('Products Model', () => {
       category_id: '5555',
       price: 444,
       weight: 0.5,
+      quantity_in_stock: 10,
+    };
+  
+    badObj = {
+      id: '666', 
+      category_id: 5555,
+      price: 'too much',
+      weight: '1 lb',
       quantity_in_stock: 10,
     };
   });
@@ -24,6 +33,19 @@ describe('Products Model', () => {
         });
       })
       .catch(e => console.error('ERR', e));
+  });
+
+  
+  it('will not post() an invalid object', () => {
+    return products.mockCreate(badObj)
+      .then(record => {
+        Object.keys(badObj).forEach(key => {
+          expect(record[key]).toEqual(badObj[key]);
+        });
+      })
+      .catch(e => {
+        expect(e).toEqual('Invalid object');
+      });
   });
 
   it('can get() a product', () => {
@@ -45,9 +67,6 @@ describe('Products Model', () => {
 
     return products.mockUpdate(obj.id, newObj)
       .then(record => {
-        // console.log('Did we get a record? ', record);
-        // console.log(newObj.id);
-        // newObj.id = obj.id;
         Object.keys(newObj).forEach(key => {
           expect(record[key]).toEqual(newObj[key])
         });

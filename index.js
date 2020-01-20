@@ -1,18 +1,20 @@
+'use strict';
+
 const Products = require('./models/products/products.js');
-const Validator = require('./lib/validator.js');
 const Categories = require('./models/categories/categories.js');
 
 const categories = new Categories();
 const products = new Products();
-const validator = new Validator();
 
 
-// let badObj = {
-    //     name: 2345,
-    // }
-// categories.create(badObj).then(resut => {
-//     console.log('result in create: ', result);
-// }).catch(err => console.log('ERR :' , err));
+let badObj = {
+        name: 2345,
+    }
+categories.create(badObj).then(result => {
+    console.log('result in create: ', result);
+}).then(innerRes => {
+    console.log('Is there anything here? ', innerRes);
+}).catch(err => console.log('ERR :' , err));
 
 let obj = {
     category_id: '123456', 
@@ -43,21 +45,3 @@ products.create(obj).then(record => {
         });
     });
 }).catch(e => console.error('ERR', e));
-
-// let obj2 = {
-//     category_id: '654321', 
-//     price: 444,
-//     quantity_in_stock: 1,
-//   };
-
-// console.log('Product object to create: ', obj2);
-// products.create(obj2, products).then(record => {
-//     console.log('Did we get a record? ', record);
-//     Object.keys(obj2).forEach(key => {
-//         console.log('key: ', key, '        value: ', record[key]);
-//     });
-// }).catch(e => console.error('ERR', e));
-
-// products.get(obj.id).then(record => {
-//     console.log('Record from second get: ', record[0]);
-// });
