@@ -5,14 +5,19 @@ describe('Categories Model', () => {
 
   var categories;
   var validator;
+  let obj;
+  let badObj;
+  let fakeId;
 
   beforeEach(() => {
     categories = new Categories();
     validator = new Validator();
+    obj = { name: 'Test Category' };
+    badObj = { name: 2341123423 };
+    fakeId = 'asdfasldkj31412341234';
   });
 
   it('can post() a new category', () => {
-    let obj = { name: 'Test Category' };
     return categories.create(obj)
       .then(record => {
         Object.keys(obj).forEach(key => {
@@ -23,7 +28,6 @@ describe('Categories Model', () => {
   });
 
   it('can get() a category with valid property types', () => {
-    let obj = { name: 'Test Category' };
     return categories.create(obj)
       .then(record => {
         return categories.get(record._id)
@@ -37,20 +41,16 @@ describe('Categories Model', () => {
   });
 
   it('will not post() an invalid object', () => {
-    let obj = { name: 2341123423 };
-    return categories.create(obj)
+    return categories.create(badObj)
       .then(record => {
-        Object.keys(obj).forEach(key => {
-          expect(record[key]).toEqual(obj[key]);
-        });
+        console.log('We are not supposed to hit this! ', record);
+      }, failure => {
+        expect(failure).toEqual('Invalid object');
       })
-      .catch(e => {
-        expect(e).toEqual('Invalid object');
-      });
+      .catch(e => console.error('ERR', e));
   });
 
   it('can update a category', () => {
-    let obj = { name: 'Test Category 1' };
     return categories.create(obj)
     .then(record => {
       return categories.get(record._id)
@@ -64,8 +64,22 @@ describe('Categories Model', () => {
       });
   });
 
+  it('will not update a category with a bad object', () => {
+    return categories.create(obj)
+    .then(record => {
+      return categories.get(record._id)
+        .then(category => {
+          return categories.update(category[0].id, badObj)
+            .then(record => {
+              console.log('We are not supposed to hit this! ', record);
+            }, failure => {
+              expect(failure).toEqual('Invalid object');
+            });
+        });
+      });
+  });
+
   it('can delete a category', () => {
-    let obj = { name: 'Test Category 1' };
     let obj2 = { name: 'Test Category 2' };
     return categories.create(obj)
       .then(() => {
@@ -79,5 +93,15 @@ describe('Categories Model', () => {
             });
         });
       });
+  });
+
+  it('will not delete a category if the ID does not exist in the database', () => {
+    return categories.delete(fakeId)
+    .then(records => {
+      console.log('We are not supposed to hit this! ', records);
+    }, failure => {
+      expect(failure).toEqual('Entry not found');
+    })
+    .catch(e => console.error('ERR', e));
   });
 });

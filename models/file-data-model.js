@@ -1,11 +1,9 @@
 'use strict';
 
-const uuid = require('uuid/v4');
 const mockFs = require('../__mocks__/fs.js');
 const fs = require('fs');
 const Validator = require('../lib/validator.js');
 const filePath = `${__dirname}/data/products.json`;
-const mockPath = `${__dirname}/data/mock-products.json`;
 
 const validator = new Validator();
 
@@ -43,16 +41,17 @@ class FileCollection {
     });
   }
 
-  create(data) {
+  create(newData) {
     return new Promise((resolve, reject) => {
-      let record = new this.DataModel(data);
-
-      if (!validator.isValid(record, record.schema)) { reject('Invalid Object'); }
       
       fs.readFile(filePath, (err, data) => {
         if (err) {
           reject(err);
         }
+        
+        let record = new this.DataModel(newData);
+  
+        if (!validator.isValid(record, record.schema)) { reject('Invalid object'); }
 
         let dbObj;
         dbObj = data ? JSON.parse(data) : null;
@@ -76,10 +75,15 @@ class FileCollection {
 
   mockCreate(newData) {
     return new Promise((resolve, reject) => {
+      
       mockFs.readFile(filePath, (err, data) => {
         if (err) {
           reject(err);
         }
+        
+        let record = new this.DataModel(newData);
+
+        if (!validator.isValid(record, record.schema)) { reject('Invalid object'); }
 
         let dbObj;
         dbObj = data ? JSON.parse(data) : null;
@@ -89,7 +93,7 @@ class FileCollection {
           dbObj = {};
         }
 
-        dbObj[newData.id] = newData;
+        dbObj[record.id] = record;
         jsonString = JSON.stringify(dbObj);
         mockFs.writeFile(filePath, jsonString, (err, data) => {
           if (err) { reject(err); }
@@ -200,7 +204,6 @@ class FileCollection {
         mockFs.writeFile(filePath, jsonString, (err, data) => {
           if (err) { reject(err); }
           else {
-              // data = newData;
               resolve(dbObj);
           }
         });

@@ -4,7 +4,9 @@ describe('Products Model', () => {
 
   let products;
   let obj;
-
+  let badObj;
+  let fakeId;
+  
   beforeEach(() => {
     products = new Products();
     obj = {
@@ -14,6 +16,16 @@ describe('Products Model', () => {
       weight: 0.5,
       quantity_in_stock: 10,
     };
+  
+    badObj = {
+      id: '666', 
+      category_id: 5555,
+      price: 'too much',
+      weight: '1 lb',
+      quantity_in_stock: 10,
+    };
+
+    fakeId = 'asdfasldkj31412341234';
   });
 
   it('can post() a new product', () => {
@@ -22,6 +34,17 @@ describe('Products Model', () => {
         Object.keys(obj).forEach(key => {
           expect(record[key]).toEqual(obj[key]);
         });
+      })
+      .catch(e => console.error('ERR', e));
+  });
+
+  
+  it('will not post() an invalid object', () => {
+    return products.mockCreate(badObj)
+      .then(record => {
+        console.log('We are not supposed to hit this! ', record);
+      }, failure => {
+        expect(failure).toEqual('Invalid object');
       })
       .catch(e => console.error('ERR', e));
   });
@@ -45,13 +68,20 @@ describe('Products Model', () => {
 
     return products.mockUpdate(obj.id, newObj)
       .then(record => {
-        // console.log('Did we get a record? ', record);
-        // console.log(newObj.id);
-        // newObj.id = obj.id;
         Object.keys(newObj).forEach(key => {
           expect(record[key]).toEqual(newObj[key])
         });
       })
+      .catch(e => console.error('ERR', e));
+  });
+
+  it('will not update a product with a bad object', () => {
+    return products.mockUpdate(obj.id, badObj)
+      .then(record => {
+        console.log('We are not supposed to hit this! ', record);
+      }, failure => {
+          expect(failure).toEqual('Invalid object');
+        })
       .catch(e => console.error('ERR', e));
   });
 
@@ -61,6 +91,16 @@ describe('Products Model', () => {
       Object.keys(records).forEach(key => {
         expect(key).not.toEqual(obj.id);
       });
+    })
+    .catch(e => console.error('ERR', e));
+  });
+
+  it('will not delete a product if the ID does not exist in the database', () => {
+    return products.mockDelete(fakeId)
+    .then(records => {
+      console.log('We are not supposed to hit this! ', records);
+    }, failure => {
+      expect(failure).toEqual('Entry not found');
     })
     .catch(e => console.error('ERR', e));
   });
