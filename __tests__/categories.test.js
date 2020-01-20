@@ -7,12 +7,14 @@ describe('Categories Model', () => {
   var validator;
   let obj;
   let badObj;
+  let fakeId;
 
   beforeEach(() => {
     categories = new Categories();
     validator = new Validator();
     obj = { name: 'Test Category' };
     badObj = { name: 2341123423 };
+    fakeId = 'asdfasldkj31412341234';
   });
 
   it('can post() a new category', () => {
@@ -91,5 +93,15 @@ describe('Categories Model', () => {
             });
         });
       });
+  });
+
+  it('will not delete a category if the ID does not exist in the database', () => {
+    return categories.delete(fakeId)
+    .then(records => {
+      console.log('We are not supposed to hit this! ', records);
+    }, failure => {
+      expect(failure).toEqual('Entry not found');
+    })
+    .catch(e => console.error('ERR', e));
   });
 });

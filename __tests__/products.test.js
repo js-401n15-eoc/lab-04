@@ -5,7 +5,8 @@ describe('Products Model', () => {
   let products;
   let obj;
   let badObj;
-
+  let fakeId;
+  
   beforeEach(() => {
     products = new Products();
     obj = {
@@ -23,6 +24,8 @@ describe('Products Model', () => {
       weight: '1 lb',
       quantity_in_stock: 10,
     };
+
+    fakeId = 'asdfasldkj31412341234';
   });
 
   it('can post() a new product', () => {
@@ -88,6 +91,16 @@ describe('Products Model', () => {
       Object.keys(records).forEach(key => {
         expect(key).not.toEqual(obj.id);
       });
+    })
+    .catch(e => console.error('ERR', e));
+  });
+
+  it('will not delete a product if the ID does not exist in the database', () => {
+    return products.mockDelete(fakeId)
+    .then(records => {
+      console.log('We are not supposed to hit this! ', records);
+    }, failure => {
+      expect(failure).toEqual('Entry not found');
     })
     .catch(e => console.error('ERR', e));
   });

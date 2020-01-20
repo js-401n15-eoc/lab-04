@@ -30,7 +30,9 @@ class MemCollection {
   }
 
   delete(id) {
+    const oldLength = this.database.length;
     this.database = this.database.filter((record) => record.id !== id);
+    if (this.database.length === oldLength) { return Promise.reject('Entry not found'); }
     return Promise.resolve();
   }
 
